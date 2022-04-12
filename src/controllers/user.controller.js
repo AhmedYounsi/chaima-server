@@ -13,6 +13,16 @@ exports.getUser = async (req, res) => {
   }
 };
 
+exports.getUserByDepartement = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.departement).select('-password');
+    res.json(user);
+  } catch (error) {
+    console.error(error.message);
+    res.status(400).send('Server error');
+  }
+};
+
 exports.getAllUser = async (req, res) => {
   try {
     const user = await User.find();

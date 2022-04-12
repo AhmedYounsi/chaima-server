@@ -4,19 +4,25 @@ const Schema = mongoose.Schema;
 const EventSchema = mongoose.Schema({
   user: {
     type: Schema.Types.ObjectId,
+    ref: 'User',
   },
   title: {
     type: String,
     required: true,
   },
-
+  office: {
+    type: Schema.Types.ObjectId,
+    ref: 'Office',
+  },
+  members: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
   adress: {
     type: String,
     required: true,
-  },
-
-  type: {
-    type: String,
   },
   desc: {
     type: String,
@@ -32,9 +38,9 @@ const EventSchema = mongoose.Schema({
   },
   start_time: [],
 
-  etat: {
-    type: String,
-    required: true,
+  date: {
+    type: Date,
+    default: Date.now,
   },
   likes: [
     {
@@ -66,4 +72,4 @@ const EventSchema = mongoose.Schema({
   ],
 });
 
-module.exports = Event = mongoose.model('event', EventSchema);
+module.exports = mongoose.model('Event', EventSchema);

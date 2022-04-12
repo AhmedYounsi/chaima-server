@@ -13,24 +13,21 @@ router.post('/', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
 
-    const newEvent = new Event({
+    const event = new Event({
       user: req.user.id,
-      title,
-      adress,
-      type,
-      desc,
-      start,
-      end,
-      start_time,
-      etat,
+      title: req.body.title,
+      adress: req.body.adress,
+      desc: req.body.desc,
+      start: req.body.start,
+      end: req.body.end,
+      start_time: req.body.start_time,
     });
 
-    const event = await newEvent.save();
-
+    await event.save();
     res.json(event);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).send('Server Error');
   }
 });
 
