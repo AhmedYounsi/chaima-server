@@ -81,13 +81,15 @@ exports.loginUser = async (req, res) => {
   try {
     let user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).send({ msg: 'Ivalid credentials' });
+      return res.status(400).send({ msg: 'Ivalid credentials not found' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(400).send({ msg: 'Ivalid credentials' });
+      return res
+        .status(400)
+        .send({ msg: 'Ivalid credentials password incorrect' });
     }
 
     const paylod = {
