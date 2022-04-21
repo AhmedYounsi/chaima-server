@@ -7,7 +7,6 @@ const TimeOffTypeSchema = new mongoose.Schema({
   },
   solde: {
     type: Number,
-    required: true,
   },
 });
 

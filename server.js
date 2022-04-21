@@ -8,6 +8,7 @@ var teamRouter = require('./src/routes/TeamRoute');
 var officeRouter = require('./src/routes/OfficeRoute');
 var timeOffTypeRouter = require('./src/routes/TimeOffTypeRoute');
 var folderTypeRouter = require('./src/routes/FolderTypeRoute');
+var contractTypeRouter = require('./src/routes/ContractTypeRoute');
 
 const cors = require('cors');
 const app = express();
@@ -25,6 +26,7 @@ app.use('/teams', teamRouter);
 app.use('/offices', officeRouter);
 app.use('/timeOff', timeOffTypeRouter);
 app.use('/folder', folderTypeRouter);
+app.use('/contractType', contractTypeRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server started ${PORT}`));
