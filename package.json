@@ -9,16 +9,11 @@
     "start": "node server.js",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/chaima-dey/RHADDINN.git"
-  },
+ 
   "author": "chaimadey",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/chaima-dey/RHADDINN/issues"
   },
-  "homepage": "https://github.com/chaima-dey/RHADDINN#readme",
   "dependencies": {
     "async": "^3.2.1",
     "axios": "^0.23.0",
