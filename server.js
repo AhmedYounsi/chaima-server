@@ -25,7 +25,7 @@ app.use('/posts', postRouter);
 app.use('/teams', teamRouter);
 app.use('/offices', officeRouter);
 app.use('/timeOff', timeOffTypeRouter);
-app.use('/folder', folderTypeRouter);
+app.use('/folderType', folderTypeRouter);
 app.use('/contractType', contractTypeRouter);
 
 const PORT = process.env.PORT || 5000;

@@ -75,7 +75,6 @@ exports.createUser = async (req, res) => {
   }
 };
 
-
 exports.updateUser = async (req, res) => {
   try {
     const uploaded = await User.findByIdAndUpdate(
@@ -92,28 +91,26 @@ exports.updateUser = async (req, res) => {
     res.send(uploaded);
   } catch (error) {
     console.log(error);
-    res.status(404).send("Error updating");
+    res.status(404).send('Error updating');
   }
-}
-
+};
 
 exports.updatePassword = async (req, res) => {
-
   const { id, OldPassword, NewPassword } = req.body;
-  const user = await User.findById(id)
-  const passwords_compare = await bcrypt.compare(
-    OldPassword,
-    user.password
-  );
+  const user = await User.findById(id);
+  const passwords_compare = await bcrypt.compare(OldPassword, user.password);
 
-  if (!passwords_compare) return res.status(404).send("Mot de passe incorrect");
-
+  if (!passwords_compare) return res.status(404).send('Mot de passe incorrect');
   else {
     const hashPassowrd = await bcrypt.hash(NewPassword, 10);
-    const updatedPassword = await User.findByIdAndUpdate(id, { password: hashPassowrd }, { new: true })
-    res.status(200).send("Password changed successfully !");
+    const updatedPassword = await User.findByIdAndUpdate(
+      id,
+      { password: hashPassowrd },
+      { new: true }
+    );
+    res.status(200).send('Password changed successfully !');
   }
-}
+};
 
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
