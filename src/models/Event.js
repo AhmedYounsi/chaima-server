@@ -11,8 +11,7 @@ const EventSchema = mongoose.Schema({
     required: true,
   },
   office: {
-    type: Schema.Types.ObjectId,
-    ref: 'Office',
+    type: String,
   },
   members: [
     {
@@ -29,15 +28,16 @@ const EventSchema = mongoose.Schema({
     required: true,
   },
   start: {
-    type: Date,
+    type: String,
     required: true,
   },
   end: {
-    type: Date,
+    type: String,
     required: true,
   },
-  start_time: [],
-
+  image: {
+    type: String,
+  },
   date: {
     type: Date,
     default: Date.now,

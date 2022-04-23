@@ -3,27 +3,46 @@ const router = express.Router();
 const Event = require('../models/Event');
 const { check, validationResult } = require('express-validator');
 const auth = require('../middleware/auth');
+const { v4: uuidv4 } = require("uuid");
 const User = require('../models/User');
 const checkObjectId = require('../middleware/checkObjectId');
+const multer = require("multer");
+
+// storage multer
+const storage = multer.diskStorage({
+  destination: function (req, res, callback) {
+    callback(null, "uploads");
+  },
+  // extension
+  filename: async (req, file, callback) => {
+   
+    callback(null, uuidv4() + "-" + file.originalname);
+  },
+});
+
+const upload = multer({
+  storage: storage,
+});
+
+router.get("/delete",async (req,res)=>{
+    const del = await Event.deleteMany({})
+ console.log(del)
+
+})
 
 // @route    POST api/posts
 // @desc     Create a post
 // @access   Private
-router.post('/', auth, async (req, res) => {
+router.post('/',upload.single("file"), async (req, res) => {
+  const obj = JSON.parse(req.body.event);
+  if( req.file) obj.image = req.file.filename
   try {
-    const user = await User.findById(req.user.id).select('-password');
-
-    const event = new Event({
-      user: req.user.id,
-      title: req.body.title,
-      adress: req.body.adress,
-      desc: req.body.desc,
-      start: req.body.start,
-      end: req.body.end,
-      start_time: req.body.start_time,
-    });
+    const event = new Event(
+      obj
+    );
 
     await event.save();
+    console.log(event)
     res.json(event);
   } catch (error) {
     console.error(error.message);
@@ -34,7 +53,7 @@ router.post('/', auth, async (req, res) => {
 // @route    GET api/posts
 // @desc     Get all posts
 // @access   Private
-router.get('/', auth, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const events = await Event.find().sort({ date: -1 });
     res.json(events);

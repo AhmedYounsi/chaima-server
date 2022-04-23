@@ -15,9 +15,12 @@ const app = express();
 // Connect Database
 connectDB();
 // Init Middleware
+app.use("/uploads", express.static("uploads"));
 app.use(express.json());
 app.use(cors());
 // Define Routes
+
+
 app.use('/users', userRouter);
 app.use('/events', eventRouter);
 app.use('/departements', departementRouter);
