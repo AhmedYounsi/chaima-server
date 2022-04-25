@@ -49,6 +49,11 @@ app.post("/get_conv", async (req, res) => {
   return res.send(conversation);
 });
 
+app.use(express.static(__dirname + "/build/"));
+app.get(/.*/, (req, res) => {
+  res.sendFile(__dirname + "/build/index.html");
+  });
+
 io.on("connection", (socket) => {
   let roomID = null;
   socket.on("JoinRoom", async (data) => {
@@ -72,7 +77,6 @@ io.on("connection", (socket) => {
     }
     socket.join(roomID.toString());
 
-    // io.to(roomID).emit("ResendMessage");
   });
   socket.on("SendMessage", async (data) => {
     const msg = {
