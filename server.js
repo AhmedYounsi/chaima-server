@@ -84,6 +84,7 @@ socket.emit("To_another",(data)=>{
 })
 
   socket.on("SendMessage", async (data) => {
+    console.log("aaaaaaaaaaaaaa")
     socket.emit("addmessage");
     const res = await Conversation.findByIdAndUpdate(
       data.RoomID,
