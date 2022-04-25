@@ -85,7 +85,7 @@ io.on("connection", (socket) => {
       user_id: data.user._id,
       dateTime: data.dateTime,
     };
-
+    io.to(data.RoomID).emit("addmessage", {msg,id:data.RoomID});
     const res = await Conversation.findByIdAndUpdate(
       data.RoomID,
       {
@@ -106,15 +106,20 @@ io.on("connection", (socket) => {
         users: { $all: [data.MessageTo] },
         "messages.0": { $exists: true },
       }).sort({time: -1});
- 
-    io.to(data.RoomID).emit("ResendMessage", res);
+   
+    io.to(data.RoomID).emit("ResendMessage", res.messages);
   io.emit(`message${data.user._id}`, conversation_sender);
- io.emit(`message${data.MessageTo}`, conversation_receiver);
+  io.emit(`message${data.MessageTo}`, conversation_receiver);
   });
  
-  socket.on("Seen",async (id)=>{
-    const seen_conv = await Conversation.findByIdAndUpdate(id,{seen:true}, { new: true }).sort({time: -1});
-    socket.emit("Seen",seen_conv)
+  socket.on("Seen",async (data)=>{
+    
+  await Conversation.findByIdAndUpdate(data.conv._id,{seen:true}, { new: true }).sort({time: -1});
+    // const conversation_sender = await Conversation.find({
+    //   users: { $all: [data.id] }
+    // }).sort({time: -1});
+    
+    // socket.emit("Seen",conversation_sender)
   })
 });
 
