@@ -116,7 +116,7 @@ exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
   const jwtToken = 'mySecretToken';
   try {
-    let user = await User.findOne({ email });
+    let user = await User.findOne({ email : email.toLowerCase() });
     if (!user) {
       return res.status(400).send({ msg: 'Ivalid credentials not found' });
     }
