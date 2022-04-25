@@ -115,6 +115,11 @@ socket.emit("To_another",(data)=>{
   io.emit(`message${data.msg.user_id}`, conversation_sender);
   io.emit(`message${data.MessageTo}`, conversation_receiver);
   });
+
+  socket.on("Seen",async(data)=>{
+    const res = await Conversation.findByIdAndUpdate(data,{seen:true},{new:true})
+    io.to(data).emit("Seen",res);
+  })
 });
 
 // INIT PORT
