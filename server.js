@@ -57,6 +57,7 @@ app.get(/.*/, (req, res) => {
 io.on("connection", (socket) => {
   let roomID = null;
   socket.on("JoinRoom", async (data) => {
+
     const MyID = data.Me._id;
     const res = await Conversation.findOne({
       users: { $all: [MyID, data.user_id] },
@@ -64,10 +65,10 @@ io.on("connection", (socket) => {
 
     if (res) {
       roomID = res._id;
-      //   console.log("conversation exist");
+      // console.log("conversation exist");
       socket.emit("joining_room", res);
     } else {
-      //   console.log("create conversation");
+      //  console.log("create conversation");
       const conversation = new Conversation({
         users: [MyID, data.user_id],
       });
@@ -84,7 +85,6 @@ socket.emit("To_another",(data)=>{
 })
 
   socket.on("SendMessage", async (data) => {
-    console.log("aaaaaaaaaaaaaa")
     socket.emit("addmessage");
     const res = await Conversation.findByIdAndUpdate(
       data.RoomID,
