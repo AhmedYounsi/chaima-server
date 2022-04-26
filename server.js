@@ -52,7 +52,7 @@ app.post("/get_conv", async (req, res) => {
 app.use(express.static(__dirname + "/build/"));
 app.get(/.*/, (req, res) => {
   res.sendFile(__dirname + "/build/index.html");
-  });
+  }); 
 
 io.on("connection", (socket) => {
   let roomID = null;
@@ -99,7 +99,7 @@ socket.emit("To_another",(data)=>{
     );
      
 
-    io.to(data.RoomID).emit("ResendMessage", res.messages);
+    io.to(data.RoomID).emit("ResendMessage", res);
      
     const conversation_sender = await Conversation.find({
       users: { $all: [data.msg.user_id] },
