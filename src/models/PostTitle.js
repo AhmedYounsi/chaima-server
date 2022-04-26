@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
 const PostTitleSchema = new mongoose.Schema({
   name: {
@@ -8,9 +7,8 @@ const PostTitleSchema = new mongoose.Schema({
   },
 
   departement: {
-    type: Schema.Types.ObjectId,
-    ref: 'Departement',
-    required: [true, 'Departement id is required'],
+    type: String,
+    required: true,
   },
 });
 

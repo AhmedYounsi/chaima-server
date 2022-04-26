@@ -31,7 +31,6 @@ exports.getTimeOffType = async (req, res) => {
 exports.getAllTimeOffType = async (req, res) => {
   try {
     const type = await TimeOffType.find();
-    console.log(res);
     res.send(type);
   } catch (error) {
     console.error(error.message);

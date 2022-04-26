@@ -1,4 +1,5 @@
 const Departement = require('../models/Departement');
+const PostTitle = require('../models/PostTitle');
 
 exports.createDepartement = async (req, res) => {
   try {
@@ -33,8 +34,20 @@ exports.getDepartement = async (req, res) => {
 exports.getAllDepartement = async (req, res) => {
   try {
     const departement = await Departement.find();
-    console.log(res);
-    res.send(departement);
+    let arr = []
+    await Promise.all(departement.map(async (el, index) => {
+      const post = await PostTitle.find({ departement: el._id });
+
+      arr.push(
+        {
+          _id: el._id,
+          name: el.name,
+          titlePost: post,
+        },
+      )
+
+    }))
+    res.send(arr);
   } catch (error) {
     console.error(error.message);
     res.status(400).send('Server error000');

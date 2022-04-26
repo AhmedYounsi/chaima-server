@@ -31,7 +31,6 @@ exports.getFolderType = async (req, res) => {
 exports.getAllFolderType = async (req, res) => {
   try {
     const type = await FolderType.find();
-    console.log(res);
     res.send(type);
   } catch (error) {
     console.error(error.message);

@@ -31,7 +31,6 @@ exports.getContractType = async (req, res) => {
 exports.getAllContractType = async (req, res) => {
   try {
     const type = await ContractType.find();
-    console.log(res);
     res.send(type);
   } catch (error) {
     console.error(error.message);
