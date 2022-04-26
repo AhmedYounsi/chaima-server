@@ -57,6 +57,7 @@ app.get(/.*/, (req, res) => {
 io.on("connection", (socket) => {
   let roomID = null;
   socket.on("JoinRoom", async (data) => {
+
     const MyID = data.Me._id;
     const res = await Conversation.findOne({
       users: { $all: [MyID, data.user_id] },
@@ -64,10 +65,10 @@ io.on("connection", (socket) => {
 
     if (res) {
       roomID = res._id;
-      //   console.log("conversation exist");
+      // console.log("conversation exist");
       socket.emit("joining_room", res);
     } else {
-      //   console.log("create conversation");
+      //  console.log("create conversation");
       const conversation = new Conversation({
         users: [MyID, data.user_id],
       });
@@ -78,27 +79,30 @@ io.on("connection", (socket) => {
     socket.join(roomID.toString());
 
   });
+
+socket.emit("To_another",(data)=>{
+  io.to(data.RoomID).emit("To_another", data.arr);
+})
+
   socket.on("SendMessage", async (data) => {
-    const msg = {
-      text: data.message,
-      username: data.user.name + " " + data.user.lastName,
-      user_id: data.user._id,
-      dateTime: data.dateTime,
-    };
-    io.to(data.RoomID).emit("addmessage", {msg,id:data.RoomID});
+    socket.emit("addmessage");
     const res = await Conversation.findByIdAndUpdate(
       data.RoomID,
       {
-        $push: { messages: msg },
+        $push: { messages: data.msg },
         time: new Date().getTime(),
-        lastsender: data.user._id,
-        usernames: [msg.username, data.UserToSend],
+        lastsender: data.msg.user_id,
+        usernames: [data.msg.username, data.UserToSend],
         seen:false
       },
       { new: true }
     );
+     
+
+    io.to(data.RoomID).emit("ResendMessage", res);
+     
     const conversation_sender = await Conversation.find({
-      users: { $all: [data.user._id] },
+      users: { $all: [data.msg.user_id] },
       "messages.0": { $exists: true },
     }).sort({time: -1});
 
@@ -106,20 +110,15 @@ io.on("connection", (socket) => {
         users: { $all: [data.MessageTo] },
         "messages.0": { $exists: true },
       }).sort({time: -1});
-   
-    io.to(data.RoomID).emit("ResendMessage", res.messages);
-  io.emit(`message${data.user._id}`, conversation_sender);
+      // io.to(data.RoomID).emit("addmessage");
+
+  io.emit(`message${data.msg.user_id}`, conversation_sender);
   io.emit(`message${data.MessageTo}`, conversation_receiver);
   });
- 
-  socket.on("Seen",async (data)=>{
-    
-  await Conversation.findByIdAndUpdate(data.conv._id,{seen:true}, { new: true }).sort({time: -1});
-    // const conversation_sender = await Conversation.find({
-    //   users: { $all: [data.id] }
-    // }).sort({time: -1});
-    
-    // socket.emit("Seen",conversation_sender)
+
+  socket.on("Seen",async(data)=>{
+    const res = await Conversation.findByIdAndUpdate(data,{seen:true},{new:true})
+    io.to(data).emit("Seen",res);
   })
 });
 
