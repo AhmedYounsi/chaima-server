@@ -27,8 +27,8 @@ const upload = multer({
  
  
 router.post('/',upload.single("file"), async (req, res) => { 
-  console.log(req.file)
 if(req.file.filename) return res.status(200).send(req.file.filename)
+else return res.status(500).send("Failed")
 });
  
 
