@@ -1,0 +1,15 @@
+PARAMETRES D'ACCES:
+L'adresse IPv4 du VPS est : 51.255.170.15
+
+Le nom du VPS est : vps-4d0eaf21.vps.ovh.net
+
+Le compte administrateur suivant a été configuré sur le VPS :
+Nom d'utilisateur : ubuntu
+Mot de passe :      zS9pWZwj3wjw
+
+
+
+
+compte Stripe
+contact@doctoplanet.com
+Potterhead@@123
