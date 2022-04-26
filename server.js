@@ -2,6 +2,7 @@ const express = require("express");
 const connectDB = require("./config/mongoConnection");
 var userRouter = require("./src/routes/users");
 var eventRouter = require("./src/routes/EventRoute");
+var AddfileRoute = require("./src/routes/AddfileRoute");
 var departementRouter = require("./src/routes/DepartementRoute");
 var postRouter = require("./src/routes/PostTitleRoute");
 var teamRouter = require("./src/routes/TeamRoute");
@@ -27,7 +28,8 @@ app.use(cors());
 // Define Routes
 app.use("/users", userRouter);
 app.use("/events", eventRouter);
-app.use("/departements", departementRouter);
+app.use("/upload_chat", AddfileRoute); 
+app.use("/departements", departementRouter) ;
 app.use("/posts", postRouter);
 app.use("/teams", teamRouter);
 app.use("/offices", officeRouter);
@@ -48,7 +50,7 @@ app.post("/get_conv", async (req, res) => {
   }).sort({time: -1});
   return res.send(conversation);
 });
-
+ 
 app.use(express.static(__dirname + "/build/"));
 app.get(/.*/, (req, res) => {
   res.sendFile(__dirname + "/build/index.html");
