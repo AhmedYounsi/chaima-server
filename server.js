@@ -105,20 +105,21 @@ socket.emit("To_another",(data)=>{
       users: { $all: [data.msg.user_id] },
       "messages.0": { $exists: true },
     }).sort({time: -1});
-
-    const conversation_receiver = await Conversation.find({
-        users: { $all: [data.MessageTo] },
-        "messages.0": { $exists: true },
-      }).sort({time: -1});
-      // io.to(data.RoomID).emit("addmessage");
-
-  io.emit(`message${data.msg.user_id}`, conversation_sender);
-  io.emit(`message${data.MessageTo}`, conversation_receiver);
+ 
+ io.emit(`message${data.msg.user_id}`);
+ io.emit(`message${data.MessageTo}`);
+ io.emit(`notifMessage${data.MessageTo}`,(data.msg.username));
   });
 
   socket.on("Seen",async(data)=>{
     const res = await Conversation.findByIdAndUpdate(data,{seen:true},{new:true})
-    io.to(data).emit("Seen",res);
+    io.to(data).emit("Seen",res)
+  })
+  socket.on("Typing",(MessageTo)=>{
+    io.emit(`Typing${MessageTo}`);
+  })
+  socket.on("StopTyping",(MessageTo)=>{
+    io.emit(`StopTyping${MessageTo}`);
   })
 });
 
