@@ -22,9 +22,9 @@ const Conversation = require("./src/models/Conversation");
 // Connect Database
 connectDB();
 // Init Middleware
-app.use("/uploads", express.static("uploads"));
 app.use(express.json());
 app.use(cors());
+app.use("/uploads", express.static("uploads"));
 // Define Routes
 app.use("/users", userRouter);
 app.use("/events", eventRouter);

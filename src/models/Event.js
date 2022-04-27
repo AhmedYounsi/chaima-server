@@ -31,42 +31,26 @@ const EventSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+ 
   end: {
     type: String,
+    required: true,
+  },
+  time: {
+    type: [],
     required: true,
   },
   image: {
     type: String,
   },
-  date: {
-    type: Date,
-    default: Date.now,
+  createdAt: {
+    type: String,
+    default: new Date().getTime(),
   },
   likes: [
     {
       user: {
         type: Schema.Types.ObjectId,
-      },
-    },
-  ],
-  comments: [
-    {
-      user: {
-        type: Schema.Types.ObjectId,
-      },
-      text: {
-        type: String,
-        required: true,
-      },
-      name: {
-        type: String,
-      },
-      avatar: {
-        type: String,
-      },
-      date: {
-        type: Date,
-        default: Date.now,
       },
     },
   ],

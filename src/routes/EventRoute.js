@@ -27,7 +27,6 @@ const upload = multer({
 router.get("/delete",async (req,res)=>{
     const del = await Event.deleteMany({})
  console.log(del)
-
 })
 
 // @route    POST api/posts
@@ -42,7 +41,6 @@ router.post('/',upload.single("file"), async (req, res) => {
     );
 
     await event.save();
-    console.log(event)
     res.json(event);
   } catch (error) {
     console.error(error.message);
@@ -55,7 +53,7 @@ router.post('/',upload.single("file"), async (req, res) => {
 // @access   Private
 router.get('/', async (req, res) => {
   try {
-    const events = await Event.find().sort({ date: -1 });
+    const events = await Event.find().sort({ createdAt: -1 });
     res.json(events);
   } catch (err) {
     console.error(err.message);
