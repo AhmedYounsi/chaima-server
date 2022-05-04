@@ -47,3 +47,21 @@ exports.deleteTimeOffType = async (req, res) => {
     res.status(400).send('Server error');
   }
 };
+
+exports.updateTimeOffType = async (req, res) => {
+  try {
+    const type = await TimeOffType.findByIdAndUpdate(
+      req.body.id,
+      {
+        name: req.body.Name,
+      },
+
+      { new: true }
+    );
+
+    res.send(type);
+  } catch (error) {
+    console.log(error);
+    res.status(404).send('Error updating');
+  }
+};

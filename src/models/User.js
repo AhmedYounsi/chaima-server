@@ -48,6 +48,11 @@ const UserSchema = new mongoose.Schema({
     type: Schema.Types.ObjectId,
     ref: 'Office',
   },
+  departement: {
+    type: Schema.Types.ObjectId,
+    ref: 'Departement',
+    required: true,
+  },
 
   post: {
     type: Schema.Types.ObjectId,

@@ -13,7 +13,6 @@ exports.createPostTitle = async (req, res) => {
 };
 
 exports.getPostTitle = async (req, res) => {
-
   try {
     const post = await PostTitle.find({ departement: req.body.data.id });
     res.status(200).json(post);
@@ -39,5 +38,23 @@ exports.deletePostTitle = async (req, res) => {
   } catch (error) {
     console.error(error.message);
     res.status(400).send('Server error');
+  }
+};
+
+exports.updatePostTitle = async (req, res) => {
+  try {
+    const post = await PostTitle.findByIdAndUpdate(
+      req.body.id,
+      {
+        name: req.body.Name,
+      },
+
+      { new: true }
+    );
+
+    res.send(post);
+  } catch (error) {
+    console.log(error);
+    res.status(404).send('Error updating');
   }
 };

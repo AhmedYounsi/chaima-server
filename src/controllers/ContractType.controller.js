@@ -47,3 +47,21 @@ exports.deleteContractType = async (req, res) => {
     res.status(400).send('Server error');
   }
 };
+
+exports.updateContractType = async (req, res) => {
+  try {
+    const contract = await ContractType.findByIdAndUpdate(
+      req.body.id,
+      {
+        name: req.body.Name,
+      },
+
+      { new: true }
+    );
+
+    res.send(contract);
+  } catch (error) {
+    console.log(error);
+    res.status(404).send('Error updating');
+  }
+};

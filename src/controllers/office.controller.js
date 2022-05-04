@@ -46,3 +46,25 @@ exports.deleteOffice = async (req, res) => {
     res.status(400).send('Server error');
   }
 };
+
+exports.updateOffice = async (req, res) => {
+  try {
+    const office = await Office.findByIdAndUpdate(
+      req.body.id,
+      {
+        name: req.body.Name,
+        country: req.body.Country,
+        city: req.body.City,
+        zip: req.body.Zip,
+        adress: req.body.Adress,
+      },
+
+      { new: true }
+    );
+
+    res.send(office);
+  } catch (error) {
+    console.log(error);
+    res.status(404).send('Error updating');
+  }
+};

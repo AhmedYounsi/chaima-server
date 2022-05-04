@@ -6,5 +6,6 @@ router.get('/departement', Departementcontroller.getDepartement);
 router.get('/', Departementcontroller.getAllDepartement);
 router.post('/', Departementcontroller.createDepartement);
 router.delete('/', Departementcontroller.deleteDepartement);
+router.post('/update', Departementcontroller.updateDepartement);
 
 module.exports = router;

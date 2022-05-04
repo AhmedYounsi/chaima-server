@@ -34,19 +34,18 @@ exports.getDepartement = async (req, res) => {
 exports.getAllDepartement = async (req, res) => {
   try {
     const departement = await Departement.find();
-    let arr = []
-    await Promise.all(departement.map(async (el, index) => {
-      const post = await PostTitle.find({ departement: el._id });
+    let arr = [];
+    await Promise.all(
+      departement.map(async (el, index) => {
+        const post = await PostTitle.find({ departement: el._id });
 
-      arr.push(
-        {
+        arr.push({
           _id: el._id,
           name: el.name,
           titlePost: post,
-        },
-      )
-
-    }))
+        });
+      })
+    );
     res.send(arr);
   } catch (error) {
     console.error(error.message);
@@ -61,5 +60,23 @@ exports.deleteDepartement = async (req, res) => {
   } catch (error) {
     console.error(error.message);
     res.status(400).send('Server error');
+  }
+};
+
+exports.updateDepartement = async (req, res) => {
+  try {
+    const departement = await Departement.findByIdAndUpdate(
+      req.body.id,
+      {
+        name: req.body.Name,
+      },
+
+      { new: true }
+    );
+
+    res.send(departement);
+  } catch (error) {
+    console.log(error);
+    res.status(404).send('Error updating');
   }
 };

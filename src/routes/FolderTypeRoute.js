@@ -6,5 +6,6 @@ router.get('/type', FolderTypecontroller.getFolderType);
 router.get('/', FolderTypecontroller.getAllFolderType);
 router.post('/', FolderTypecontroller.createFolderType);
 router.delete('/', FolderTypecontroller.deleteFolderType);
+router.post('/update', FolderTypecontroller.updateFolderType);
 
 module.exports = router;

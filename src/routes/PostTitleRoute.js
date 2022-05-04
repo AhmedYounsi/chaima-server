@@ -5,5 +5,7 @@ const postTitlecontroller = require('../controllers/postTitle.controller');
 router.post('/single', postTitlecontroller.getPostTitle);
 router.get('/posts', postTitlecontroller.getAllPostTitle);
 router.post('/', postTitlecontroller.createPostTitle);
+router.post('/update', postTitlecontroller.updatePostTitle);
+router.delete('/', postTitlecontroller.deletePostTitle);
 
 module.exports = router;

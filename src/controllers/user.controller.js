@@ -2,7 +2,7 @@ const User = require('../models/User');
 const gravatar = require('gravatar');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
+const nodemailer = require('nodemailer');
 exports.getUser = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
@@ -24,21 +24,8 @@ exports.getAllUser = async (req, res) => {
 };
 
 exports.createUser = async (req, res) => {
-  const {
-    name,
-    email,
-    password,
-    lastName,
-    tel,
-    address,
-    DateOfBirth,
-    office,
-    departement,
-    post,
-    reportsTo,
-    typeContrat,
-    from,
-  } = req.body;
+  const { email, password } = req.body;
+  const username = req.body.name + ' ' + req.body.lastName;
   const jwtToken = 'mySecretToken';
   try {
     let user = await User.findOne({ email });
@@ -59,16 +46,9 @@ exports.createUser = async (req, res) => {
 
     await user.save();
 
-    const paylod = {
-      user: {
-        id: user.id,
-      },
-    };
-
-    jwt.sign(paylod, jwtToken, { expiresIn: 360000 }, (err, token) => {
-      if (err) throw err;
-      res.json({ token });
-    });
+    const send = await sendmail(email, username);
+    console.log(send);
+    res.json({ user });
   } catch (error) {
     console.error(error.message);
     return res.status(500).send('Server Error');
@@ -116,7 +96,7 @@ exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
   const jwtToken = 'mySecretToken';
   try {
-    let user = await User.findOne({ email : email.toLowerCase() });
+    let user = await User.findOne({ email: email.toLowerCase() });
     if (!user) {
       return res.status(400).send({ msg: 'Ivalid credentials not found' });
     }
@@ -142,5 +122,57 @@ exports.loginUser = async (req, res) => {
   } catch (error) {
     console.error(error.message);
     return res.status(500).send('Server Error');
+  }
+};
+
+const sendmail = async (mail, username) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      service: 'Outlook365',
+      host: 'smtp.office365.com',
+      port: '587',
+      tls: {
+        ciphers: 'SSLv3',
+        rejectUnauthorized: false,
+      },
+      auth: {
+        user: 'rhaddinn@outlook.fr',
+        pass: 'azertyuiop123',
+      },
+    });
+
+    // send mail with defined transport object
+    let info = await transporter.sendMail({
+      from: `"RHADDINN" rhaddinn@outlook.fr`, // sender address
+      to: `${mail}`, // list of receivers
+      subject: 'Verification Adresse mail', // Subject line
+      text: 'RHADDINN', // plain text body
+      html: `
+     
+      <div style="max-width: 500px;
+      margin: auto;
+      background-color: #9e9e9e1a;
+      padding: 30px;font-family: system-ui;border: 1px solid #cbcbcb;">
+     <div style="display: flex;justify-content: center;align-items: center;">
+      <img style="width: 200px;margin: auto;" src="https://res.cloudinary.com/dg3ftjfp0/image/upload/v1643880068/download_vfvl5h.png" alt="">
+  
+     </div>
+        <h2>Confirmation compte Doctoplanet</h2>  
+          
+          <b>Bonjour ${username}</b> <br>
+           Merci d'avoir rejoint Doctoplanet.     
+           Nous aimerions vous confirmer que votre compte a été créé avec succès. Pour accéder au compte, cliquez sur le lien ci-dessous
+         
+           <br />  
+           
+        <p style="margin:0">Si vous rencontrez des difficultés pour vous connecter à votre compte, contactez-nous.</p>
+           Cordialement<br />  
+           L'équipe du RHaddinn.
+      </div>
+      `,
+    });
+    return info;
+  } catch (error) {
+    return error;
   }
 };
