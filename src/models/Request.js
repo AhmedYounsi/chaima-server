@@ -1,17 +1,17 @@
 const mongoose = require('mongoose');
-const ObjectId = mongoose.SchemaTypes;
+const Schema = mongoose.Schema;
 
 const requestSchema = new mongoose.Schema(
   {
     employee_id: {
-      type: ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'User',
       required: [true, 'employee id is required'],
     },
     type: {
-      type: String,
-      enum: ['Sick Leave', 'leave', 'payroll'],
-      required: [true, 'employee id is required'],
+      type: Schema.Types.ObjectId,
+      ref: 'TimeOff',
+      required: [true, 'type id is required'],
     },
 
     status: {
@@ -19,11 +19,6 @@ const requestSchema = new mongoose.Schema(
       enum: ['pending', 'approved', 'rejected'],
       required: [true, 'status is required'],
       default: 'pending',
-    },
-    resolved_by: {
-      type: ObjectId,
-      ref: 'User',
-      default: null,
     },
 
     startfrom: {
@@ -33,12 +28,16 @@ const requestSchema = new mongoose.Schema(
       type: Date,
     },
     reportedTo: {
-      type: ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'User',
       default: null,
     },
     description: {
       type: String,
+    },
+    created_At: {
+      type: Date,
+      default: Date.now(),
     },
     comments: [
       {
